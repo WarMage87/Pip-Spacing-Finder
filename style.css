@@ -1,0 +1,190 @@
+body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5; /* Lighter page background */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 25px 30px; /* Adjusted padding */
+            border-radius: 12px; /* Softer radius */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* Softer shadow */
+            width: 100%;
+            max-width: 720px; 
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #0056b3; 
+            text-align: center;
+            margin-bottom: 30px; /* Increased margin */
+            font-size: 1.8em; /* Slightly larger h1 */
+        }
+        h2 { 
+            color: #0069d9; /* Slightly brighter blue for h2 */
+            margin-top: 0; 
+            margin-bottom: 15px; /* Increased margin for h2 */
+            border-bottom: 1px solid #0069d9; /* Lighter border */
+            padding-bottom: 8px; /* Adjusted padding */
+            font-size: 1.4em; 
+        }
+        .input-group {
+            margin-bottom: 22px; /* Increased spacing */
+        }
+        .collapsible-section {
+            margin-bottom: 15px; /* Consistent spacing for sections */
+        }
+        .collapsible-content {
+            display: none; 
+            padding: 20px; /* Increased padding */
+            background-color: #f8f9fa; /* Consistent light background */
+            border: 1px solid #e0e0e0; /* Lighter border */
+            border-radius: 8px; /* Softer radius */
+            margin-top: 8px; /* Space below button */
+        }
+        .toggle-button { 
+            background-color: #5a6268; /* Darker grey for toggles */
+            color: white;
+            padding: 12px 18px; /* Adjusted padding */
+            border: none;
+            border-radius: 6px; /* Softer radius */
+            cursor: pointer;
+            font-size: 0.95em; /* Adjusted font size */
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.2s ease;
+        }
+        .toggle-button:hover {
+            background-color: #495057; /* Darker on hover */
+        }
+        .toggle-button::after { /* Optional: add arrow indicator */
+            content: ' ▼'; /* Down arrow */
+            float: right;
+        }
+        .toggle-button.active::after {
+            content: ' ▲'; /* Up arrow when active */
+        }
+
+
+        .collapsible-content ul { 
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+            margin-top: 10px; /* Space above list */
+        }
+        .collapsible-content li { 
+            margin-bottom: 10px; /* Increased spacing */
+            line-height: 1.6;
+        }
+        .collapsible-content p {
+            margin-bottom: 10px; /* Increased spacing */
+            line-height: 1.6;
+        }
+        .reference-data table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px; /* Space above table */
+        }
+        .reference-data th, .reference-data td {
+            border: 1px solid #d1d5db; /* Lighter border */
+            padding: 10px 12px; /* Adjusted padding */
+            text-align: left;
+        }
+        .reference-data th {
+            background-color: #e5e7eb; /* Lighter header */
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px; /* Adjusted spacing */
+            font-weight: 600; /* Bolder label */
+            color: #4a5568; /* Softer black */
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px; /* Adjusted padding */
+            margin-bottom: 8px; 
+            border: 1px solid #cbd5e0; /* Lighter border */
+            border-radius: 6px; /* Softer radius */
+            box-sizing: border-box;
+            font-size: 1em; /* Standardized font size */
+            -moz-appearance: textfield; 
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0; 
+        }
+        button#calculateBtn { 
+            background-color: #22c55e; /* Brighter green */
+            color: white;
+            padding: 14px 20px; /* Increased padding */
+            border: none;
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 1.05em; /* Slightly larger */
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.2s ease;
+            margin-top: 25px; 
+        }
+        button#calculateBtn:hover {
+            background-color: #16a34a; /* Darker green on hover */
+        }
+        #results {
+            margin-top: 30px; /* Increased spacing */
+            padding: 25px; /* Increased padding */
+            background-color: #ffffff; /* White background for results */
+            border: 1px solid #e2e8f0; /* Lighter border */
+            border-radius: 8px; 
+            text-align: left;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); /* Subtle shadow for results */
+        }
+        #results h3 {
+            color: #0056b3;
+            margin-bottom: 18px; /* Increased spacing */
+            font-size: 1.5em;
+            border-bottom: 1px solid #0056b3;
+            padding-bottom: 8px;
+        }
+        #results p {
+            margin: 12px 0; /* Adjusted spacing */
+            font-size: 1em; 
+            line-height: 1.7;
+        }
+        #results strong { 
+            color: #2d3748; /* Darker grey for strong */
+        }
+        #results .highlight-x { 
+            color: #dd6b20; /* Orange for highlight */
+            font-weight: bold;
+            font-size: 1.3em; 
+            background-color: #fff3e0; /* Light orange background */
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        #results hr {
+            border: 0;
+            height: 1px;
+            background-color: #e2e8f0; /* Lighter hr */
+            margin: 20px 0; /* Increased margin */
+        }
+        .error {
+            color: #c53030; /* Darker red */
+            background-color: #fed7d7; /* Lighter red background */
+            padding: 12px 15px; /* Adjusted padding */
+            border-radius: 6px; 
+            margin-top: 20px; /* Increased spacing */
+            text-align: center;
+            border: 1px solid #f56565; /* Red border */
+        }
+        .processing-message {
+            display: none; 
+            text-align: center;
+            margin-top: 20px; /* Increased spacing */
+            color: #0069d9; /* Brighter blue */
+            font-style: italic;
+            font-size: 0.95em;
+        }
