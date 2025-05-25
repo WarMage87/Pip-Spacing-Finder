@@ -1,0 +1,545 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Value Finder - Advanced</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5; /* Lighter page background */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 25px 30px; /* Adjusted padding */
+            border-radius: 12px; /* Softer radius */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* Softer shadow */
+            width: 100%;
+            max-width: 720px; 
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #0056b3; 
+            text-align: center;
+            margin-bottom: 30px; /* Increased margin */
+            font-size: 1.8em; /* Slightly larger h1 */
+        }
+        h2 { 
+            color: #0069d9; /* Slightly brighter blue for h2 */
+            margin-top: 0; 
+            margin-bottom: 15px; /* Increased margin for h2 */
+            border-bottom: 1px solid #0069d9; /* Lighter border */
+            padding-bottom: 8px; /* Adjusted padding */
+            font-size: 1.4em; 
+        }
+        .input-group {
+            margin-bottom: 22px; /* Increased spacing */
+        }
+        .collapsible-section {
+            margin-bottom: 15px; /* Consistent spacing for sections */
+        }
+        .collapsible-content {
+            display: none; 
+            padding: 20px; /* Increased padding */
+            background-color: #f8f9fa; /* Consistent light background */
+            border: 1px solid #e0e0e0; /* Lighter border */
+            border-radius: 8px; /* Softer radius */
+            margin-top: 8px; /* Space below button */
+        }
+        .toggle-button { 
+            background-color: #5a6268; /* Darker grey for toggles */
+            color: white;
+            padding: 12px 18px; /* Adjusted padding */
+            border: none;
+            border-radius: 6px; /* Softer radius */
+            cursor: pointer;
+            font-size: 0.95em; /* Adjusted font size */
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.2s ease;
+        }
+        .toggle-button:hover {
+            background-color: #495057; /* Darker on hover */
+        }
+        .toggle-button::after { /* Optional: add arrow indicator */
+            content: ' ▼'; /* Down arrow */
+            float: right;
+        }
+        .toggle-button.active::after {
+            content: ' ▲'; /* Up arrow when active */
+        }
+
+
+        .collapsible-content ul { 
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+            margin-top: 10px; /* Space above list */
+        }
+        .collapsible-content li { 
+            margin-bottom: 10px; /* Increased spacing */
+            line-height: 1.6;
+        }
+        .collapsible-content p {
+            margin-bottom: 10px; /* Increased spacing */
+            line-height: 1.6;
+        }
+        .reference-data table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px; /* Space above table */
+        }
+        .reference-data th, .reference-data td {
+            border: 1px solid #d1d5db; /* Lighter border */
+            padding: 10px 12px; /* Adjusted padding */
+            text-align: left;
+        }
+        .reference-data th {
+            background-color: #e5e7eb; /* Lighter header */
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px; /* Adjusted spacing */
+            font-weight: 600; /* Bolder label */
+            color: #4a5568; /* Softer black */
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px; /* Adjusted padding */
+            margin-bottom: 8px; 
+            border: 1px solid #cbd5e0; /* Lighter border */
+            border-radius: 6px; /* Softer radius */
+            box-sizing: border-box;
+            font-size: 1em; /* Standardized font size */
+            -moz-appearance: textfield; 
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0; 
+        }
+        button#calculateBtn { 
+            background-color: #22c55e; /* Brighter green */
+            color: white;
+            padding: 14px 20px; /* Increased padding */
+            border: none;
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 1.05em; /* Slightly larger */
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.2s ease;
+            margin-top: 25px; 
+        }
+        button#calculateBtn:hover {
+            background-color: #16a34a; /* Darker green on hover */
+        }
+        #results {
+            margin-top: 30px; /* Increased spacing */
+            padding: 25px; /* Increased padding */
+            background-color: #ffffff; /* White background for results */
+            border: 1px solid #e2e8f0; /* Lighter border */
+            border-radius: 8px; 
+            text-align: left;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); /* Subtle shadow for results */
+        }
+        #results h3 {
+            color: #0056b3;
+            margin-bottom: 18px; /* Increased spacing */
+            font-size: 1.5em;
+            border-bottom: 1px solid #0056b3;
+            padding-bottom: 8px;
+        }
+        #results p {
+            margin: 12px 0; /* Adjusted spacing */
+            font-size: 1em; 
+            line-height: 1.7;
+        }
+        #results strong { 
+            color: #2d3748; /* Darker grey for strong */
+        }
+        #results .highlight-x { 
+            color: #dd6b20; /* Orange for highlight */
+            font-weight: bold;
+            font-size: 1.3em; 
+            background-color: #fff3e0; /* Light orange background */
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        #results hr {
+            border: 0;
+            height: 1px;
+            background-color: #e2e8f0; /* Lighter hr */
+            margin: 20px 0; /* Increased margin */
+        }
+        .error {
+            color: #c53030; /* Darker red */
+            background-color: #fed7d7; /* Lighter red background */
+            padding: 12px 15px; /* Adjusted padding */
+            border-radius: 6px; 
+            margin-top: 20px; /* Increased spacing */
+            text-align: center;
+            border: 1px solid #f56565; /* Red border */
+        }
+        .processing-message {
+            display: none; 
+            text-align: center;
+            margin-top: 20px; /* Increased spacing */
+            color: #0069d9; /* Brighter blue */
+            font-style: italic;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <h1>X-Value (Pip Spacing) Finder</h1>
+
+
+    <div class="input-group">
+        <label for="budgetUSD">Enter Budget (USD):</label>
+        <input type="number" id="budgetUSD" placeholder="e.g., 100 (must be > 0)" step="any" value="100" min="0">
+    </div>
+    <div class="input-group">
+        <label for="targetY">Enter Target Y-value (Pips to Bust):</label>
+        <input type="number" id="targetY" placeholder="e.g., 135 (must be > 0)" step="any" min="0">
+    </div>
+    <div class="input-group">
+        <label for="spreadPips">Enter Spread (in pips):</label>
+        <input type="number" id="spreadPips" placeholder="e.g., 2.5 (must be >= 0)" step="any" value="0" min="0">
+    </div>
+
+
+    <div class="collapsible-section">
+        <button type="button" class="toggle-button" onclick="toggleCollapsible('advancedOptionsContent', this)">Advanced Options (Martingale)</button>
+        <div class="collapsible-content" id="advancedOptionsContent">
+            <label for="martingaleFactor">Martingale Factor (e.g., 1.0000 for no Martingale):</label>
+            <input type="number" id="martingaleFactor" placeholder="e.g., 1.0000 or 1.0651 (must be >= 1)" step="0.0001" value="1.0000" min="1">
+             <p style="font-size:0.85em; color:#555; margin-top:5px;">A factor of 1.0000 means each layer has the same 0.01 lot size. Higher factors increase lot sizes geometrically (Lot = 0.01 * Factor<sup>LayerIndex</sup>, rounded to 2dp).</p>
+        </div>
+    </div>
+    
+    <button id="calculateBtn" onclick="findAndDisplayX()">Find Optimal X-Value</button>
+    
+    <div id="processingMessage" class="processing-message">
+        Calculating... please wait. This may take some time with Martingale factors.
+    </div>
+
+
+    <div id="results" style="display: none;">
+        <!-- Results will be populated here -->
+    </div>
+
+
+    <div class="collapsible-section">
+        <button type="button" class="toggle-button" onclick="toggleCollapsible('instructionsContent', this)">How to Use This Calculator</button>
+        <div class="collapsible-content" id="instructionsContent">
+            <h2>How to Use This Calculator</h2>
+            <ul>
+                <li><strong>Purpose:</strong> This tool helps you find an optimal 'X' value (pip spacing between layered trades) based on your desired 'Y' value (total pips movement from the first trade's entry that would lead to your budget bust), considering trade spread, a custom budget, and an optional Martingale factor for layer sizing.</li>
+                <li><strong>Inputs:</strong>
+                    <ul>
+                        <li><strong>Budget (USD):</strong> Total dollar amount you are willing to risk (must be > 0).</li>
+                        <li><strong>Target Y-value (Pips to Bust):</strong> Total pips movement from the first layer's entry you estimate would make your budget "go bust" (must be > 0).</li>
+                        <li><strong>Spread (in pips):</strong> Spread for your trades (must be >= 0). Added to each layer's loss.</li>
+                        <li><strong>Martingale Factor (Advanced Option):</strong> Multiplier for subsequent layer sizes (must be >= 1.0000). Default is 1.0000 (no Martingale, all layers 0.01 lot). The calculator uses a standard geometric Martingale progression: Lot Size = Base Lot (0.01) * (MartingaleFactor ^ LayerIndex), rounded to 2 decimal places.
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>Calculation:</strong> Tests 'X' values. For each 'X', spread, budget, and Martingale factor, it simulates adding layers. Lot size for layer `i` (0-indexed) is determined by the geometric Martingale formula. Loss per layer includes pips moved against it + spread, multiplied by its specific lot value. Determines 'Y' where budget is exceeded.</li>
+                <li><strong>Assumptions:</strong>
+                    <ul>
+                        <li>Base Layer Size: 0.01 lots (before Martingale factor).</li>
+                        <li>Base Value per Pip (per 0.01 lot): $0.10 USD.</li>
+                        <li>Commissions are NOT factored.</li>
+                    </ul>
+                </li>
+                <li><strong>Output:</strong>
+                    <ul>
+                        <li>Optimal 'X' value (Pip Spacing) closest to your target 'Y'.</li>
+                        <li>Actual 'Y' (Pips to Bust) calculated.</li>
+                        <li>Number of layers active at bust.</li>
+                        <li>Budget, Spread, and Martingale Factor used.</li>
+                    </ul>
+                </li>
+                 <li><strong>Note:</strong> Calculations with Martingale factors, especially higher ones, can be intensive and take longer. Risk escalates dramatically with Martingale factors > 1.</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="collapsible-section">
+        <button type="button" class="toggle-button" onclick="toggleCollapsible('spreadsContent', this)">Reference Spreads (Typical Values)</button>
+        <div class="collapsible-content" id="spreadsContent">
+            <div class="reference-data">
+                <h2>Reference Spreads (Typical Values)</h2>
+                <table>
+                    <thead>
+                        <tr><th>Symbol</th><th>Spread (pips)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>EURUSD</td><td>1.0</td></tr>
+                        <tr><td>GBPUSD</td><td>1.3</td></tr>
+                        <tr><td>USDJPY</td><td>2.1</td></tr>
+                        <tr><td>EURJPY</td><td>2.3</td></tr>
+                        <tr><td>GBPJPY</td><td>2.4</td></tr>
+                        <tr><td>XAUUSD</td><td>2.80</td></tr>
+                        <tr><td>BTCUSD</td><td>2.5</td></tr>
+                        <tr><td>ETHUSD</td><td>2.3</td></tr>
+                        <tr><td>US30</td><td>5.8</td></tr>
+                        <tr><td>NAS100</td><td>3.1</td></tr>
+                        <tr><td>AUDUSD</td><td>1.6</td></tr>
+                        <tr><td>XBRUSD</td><td>8.0</td></tr>
+                        <tr><td>GER40</td><td>3.9</td></tr>
+                        <tr><td>EURAUD</td><td>3.5</td></tr>
+                        <tr><td>GBPAUD</td><td>3.0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="collapsible-section">
+        <button type="button" class="toggle-button" onclick="toggleCollapsible('copyrightContent', this)">Copyright & Attribution</button>
+        <div class="collapsible-content" id="copyrightContent">
+            <div class="attribution">
+                <h2>Copyright & Attribution</h2>
+                <p>This X-Value Finder (incorporating Martingale, Budget & Spread considerations) is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.</p>
+                <p>You are free to:</p>
+                <ul>
+                    <li><strong>Share:</strong> Copy and redistribute the material in any medium or format.</li>
+                    <li><strong>Adapt:</strong> Remix, transform, and build upon the material for any purpose, even commercially.</li>
+                </ul>
+                <p>Under the following terms:</p>
+                <ul>
+                    <li><strong>Attribution:</strong> You must give appropriate credit, provide a link to the license (e.g., <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>), and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</li>
+                </ul>
+                <p>Please attribute the conceptual design and request for this tool to:<br>
+                <strong>Winston Koh, Founder & Chief Trader of ZenithFX Trading Academy.</strong></p>
+                <p><em>Your use of this calculator implies understanding of its assumptions and limitations, especially regarding the high risks associated with Martingale strategies.</em></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function toggleCollapsible(elementId, buttonElement) {
+        const content = document.getElementById(elementId);
+        if (content.style.display === 'none' || content.style.display === '') {
+            content.style.display = 'block';
+            buttonElement.classList.add('active');
+        } else {
+            content.style.display = 'none';
+            buttonElement.classList.remove('active');
+        }
+    }
+
+
+    // Standard Geometric Martingale Lot Sizing
+    function getLotSizeForLayer(layerIndex, martingaleFactor, baseLotSize = 0.01) {
+        if (martingaleFactor < 1) martingaleFactor = 1; 
+        let lotMultiplier = Math.pow(martingaleFactor, layerIndex);
+        return parseFloat((baseLotSize * lotMultiplier).toFixed(2));
+    }
+
+
+    function simulateBustForGivenX(pipSpacingX, spread, budget, martingaleFactor) {
+        const baseLotSize = 0.01;
+        const valuePerPipPerBaseMinLot = 0.10; 
+        const pipIncrement = 0.01; 
+        
+        let maxYCheck = (budget / valuePerPipPerBaseMinLot) + (50 * spread) + 200; 
+        if (pipSpacingX > 0 && pipSpacingX < 1) maxYCheck += (100 / pipSpacingX) * spread;
+        if (martingaleFactor > 1.05) { // More sensitive adjustment for MF
+            let firstLayerLot = getLotSizeForLayer(0, martingaleFactor, baseLotSize);
+            let firstLayerPipValue = (firstLayerLot / baseLotSize) * valuePerPipPerBaseMinLot;
+             // If first layer alone can bust the budget, maxYCheck can be much smaller.
+            if (firstLayerPipValue > 0) {
+                 maxYCheck = Math.min(maxYCheck, (budget / firstLayerPipValue) + spread + pipSpacingX + 50); // Add some buffer for spacing and subsequent layers
+            }
+        }
+        maxYCheck = Math.max(maxYCheck, Math.max(50, targetY.value ? parseFloat(targetY.value) + 50 : 50) ); // Ensure it's at least targetY + buffer or 50
+
+
+
+
+        let y = 0.0;
+
+
+        for (let currentY = pipIncrement; currentY <= maxYCheck; currentY += pipIncrement) {
+            y = parseFloat(currentY.toFixed(Math.max(2, (pipIncrement.toString().split('.')[1] || '').length)));
+            
+            let numLayersOpen = Math.floor(y / pipSpacingX) + 1;
+            let totalDollarLoss = 0; 
+
+
+            for (let i = 0; i < numLayersOpen; i++) { 
+                let pipsMovedAgainstLayer_i = y - (i * pipSpacingX);
+                
+                if (pipsMovedAgainstLayer_i >= 0) { 
+                    const currentLayerLotSize = getLotSizeForLayer(i, martingaleFactor, baseLotSize);
+                    if (currentLayerLotSize <= 0) continue; // Skip if lot size rounds to 0 or less
+                    const pipValueForCurrentLayer = (currentLayerLotSize / baseLotSize) * valuePerPipPerBaseMinLot;
+                    totalDollarLoss += (pipsMovedAgainstLayer_i + spread) * pipValueForCurrentLayer;
+                }
+            }
+            
+            if (totalDollarLoss >= budget) {
+                return { 
+                    yBust: parseFloat(y.toFixed(2)),
+                    layersAtBust: numLayersOpen 
+                };
+            }
+        }
+        console.warn(`Sim for X=${pipSpacingX.toFixed(1)},S=${spread.toFixed(1)},B=${budget.toFixed(2)},MF=${martingaleFactor.toFixed(4)} did not bust in maxY=${maxYCheck.toFixed(2)}`);
+        return null; 
+    }
+
+
+    function findBestXForTargetY(targetY, spread, budget, martingaleFactor) {
+        let bestX = null;
+        let minDifference = Infinity;
+        let actualYBustForBestX = null;
+        let layersForBestX = null;
+
+
+        const xMin = 0.1;
+        let xMax = Math.max(75.0, targetY + 50 + (20 * spread)); // Adjusted xMax, start with a higher base
+        if (martingaleFactor > 1.05 && targetY < budget / (martingaleFactor * 1.2) ) { 
+             xMax = Math.max(xMax, targetY * martingaleFactor * 1.5 + 100 + pipSpacingX*5); // Removed pipSpacingX not defined here
+        }
+         xMax = Math.max(xMax, targetY + (martingaleFactor > 1.05 ? 100 : 50) ); // Simpler dynamic xMax
+        xMax = Math.min(xMax, 400); // Increased cap for xMax
+        const xStep = 0.1;
+
+
+        for (let currentTestX = xMin; currentTestX <= xMax; currentTestX += xStep) {
+            const currentTestXRounded = parseFloat(currentTestX.toFixed(1)); 
+            if (currentTestXRounded <= 0) continue; 
+            const simulationResult = simulateBustForGivenX(currentTestXRounded, spread, budget, martingaleFactor);
+
+
+            if (simulationResult) {
+                const calculatedY = simulationResult.yBust;
+                const difference = Math.abs(calculatedY - targetY);
+
+
+                if (difference < minDifference) {
+                    minDifference = difference;
+                    bestX = currentTestXRounded;
+                    actualYBustForBestX = calculatedY;
+                    layersForBestX = simulationResult.layersAtBust;
+                } 
+            }
+        }
+
+
+        if (bestX !== null) {
+            return {
+                bestXValue: bestX,
+                calculatedYForBestX: actualYBustForBestX,
+                layersAtBust: layersForBestX,
+                differenceFromTargetY: minDifference
+            };
+        } else {
+             return { error: `Could not find a suitable X-value. Target Y (${targetY.toFixed(2)}) might be outside achievable range for tested X (up to ${xMax.toFixed(1)} pips), Budget ($${budget.toFixed(2)}), Spread (${spread.toFixed(1)}), and Martingale Factor (${martingaleFactor.toFixed(4)}). Consider adjusting inputs, or the X-range logic in the code if using extreme Martingale factors or unusual budget/Y combinations.` };
+        }
+    }
+
+
+    function findAndDisplayX() {
+        const resultsDiv = document.getElementById('results');
+        const processingMsg = document.getElementById('processingMessage');
+        const budgetString = document.getElementById('budgetUSD').value;
+        const targetYString = document.getElementById('targetY').value; // Corrected: targetY not targetY.value here
+        const spreadString = document.getElementById('spreadPips').value;
+        const martingaleFactorString = document.getElementById('martingaleFactor').value;
+        
+        resultsDiv.style.display = 'none';
+        resultsDiv.innerHTML = ''; 
+        processingMsg.style.display = 'none';
+
+
+        let hasError = false;
+        let errorMsg = '';
+
+
+        const budgetValue = parseFloat(budgetString);
+        const targetYValue = parseFloat(targetYString); // Used here for validation
+        const spreadValue = parseFloat(spreadString);
+        const martingaleFactorValue = parseFloat(martingaleFactorString);
+
+
+        if (budgetString.trim() === "" || isNaN(budgetValue) || budgetValue <= 0) {
+            errorMsg += '<p>Budget must be a positive number (e.g., 100).</p>';
+            hasError = true;
+        }
+        if (targetYString.trim() === "" || isNaN(targetYValue) || targetYValue <= 0) {
+            errorMsg += '<p>Target Y-value (Pips to Bust) must be a positive number (e.g., 135).</p>';
+            hasError = true;
+        }
+        if (spreadString.trim() === "" || isNaN(spreadValue) || spreadValue < 0) {
+            errorMsg += '<p>Spread must be a non-negative number (e.g., 2.5 or 0).</p>';
+            hasError = true;
+        }
+        if (martingaleFactorString.trim() === "" || isNaN(martingaleFactorValue) || martingaleFactorValue < 1) {
+            errorMsg += '<p>Martingale Factor must be a number greater than or equal to 1.0000.</p>';
+            hasError = true;
+        }
+
+
+        if (hasError) {
+            resultsDiv.innerHTML = `<div class="error">${errorMsg}</div>`;
+            resultsDiv.style.display = 'block';
+            return;
+        }
+        
+        processingMsg.style.display = 'block'; 
+
+
+        setTimeout(() => {
+            // Pass the validated targetYValue to the function
+            const result = findBestXForTargetY(targetYValue, spreadValue, budgetValue, martingaleFactorValue);
+            processingMsg.style.display = 'none'; 
+
+
+            if (result.error) {
+                resultsDiv.innerHTML = `<p class="error">${result.error}</p>`;
+            } else {
+                resultsDiv.innerHTML = `
+                    <h3>Calculation Results:</h3>
+                    <p style="font-size: 1.1em;">Determined Optimal X-value (Pip Spacing): <span class="highlight-x">${result.bestXValue.toFixed(1)} pips</span></p>
+                    <hr>
+                    <p><strong>Input Parameters Used:</strong></p>
+                    <ul>
+                        <li>Budget: <strong>$${budgetValue.toFixed(2)} USD</strong></li>
+                        <li>Target Y-value (Pips to Bust): <strong>${targetYValue.toFixed(2)} pips</strong></li>
+                        <li>Spread: <strong>${spreadValue.toFixed(1)} pips</strong></li>
+                        <li>Martingale Factor: <strong>${martingaleFactorValue.toFixed(4)}</strong></li>
+                    </ul>
+                    <p><strong>Achieved with this X-value:</strong></p>
+                    <ul>
+                        <li>Calculated Actual Y (Pips to Bust): <strong>${result.calculatedYForBestX.toFixed(2)} pips</strong></li>
+                        <li>Number of Layers at Bust: <strong>${result.layersAtBust}</strong></li>
+                        <li><em>(This X-value resulted in a calculated Y that is <strong>${result.differenceFromTargetY.toFixed(2)} pips</strong> away from your target Y.)</em></li>
+                    </ul>
+                `;
+            }
+            resultsDiv.style.display = 'block';
+        }, 10); 
+    }
+</script>
+
+
+</body>
+</html>
